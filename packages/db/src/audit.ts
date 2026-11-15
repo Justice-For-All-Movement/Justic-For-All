@@ -39,17 +39,25 @@ export function verifyAuditRows(rows: readonly AuditRow[], startPrevious = GENES
 const SELECT_ROWS = `SELECT seq::float8 AS seq, previous_hash, event_hash, event_id::text AS event_id, actor_ref, action, resource_ref, policy_result,
   to_char(occurred_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS occurred_at FROM audit_events`;
 
-/** Database-side verification plus an independent recomputation in Node. */
+/**
+ * Database-side verification plus an independent recomputation in Node, both
+ * inside one REPEATABLE READ snapshot so concurrent appends cannot produce a
+ * false "broken" result.
+ */
 export async function verifyAuditChain(client: PoolClient): Promise<{ ok: boolean; checked: number; firstBadSeq: number | null; headSeq: number; headHash: string; independent: boolean }> {
-  const db = await client.query<{ ok: boolean; checked: string; first_bad_seq: string | null; head_seq: string; head_hash: string }>("SELECT * FROM jfa_verify_audit_chain()");
-  const rows = await client.query<AuditRow>(`${SELECT_ROWS} WHERE seq IS NOT NULL ORDER BY seq`);
-  const independent = verifyAuditRows(rows.rows);
-  const d = db.rows[0];
-  return {
-    ok: d.ok && independent.ok && (independent.ok ? independent.headHash === d.head_hash : false),
-    checked: Number(d.checked), firstBadSeq: d.first_bad_seq === null ? (independent.ok ? null : independent.firstBadSeq) : Number(d.first_bad_seq),
-    headSeq: Number(d.head_seq), headHash: d.head_hash, independent: independent.ok
-  };
+  await client.query("BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY");
+  try {
+    const db = await client.query<{ ok: boolean; checked: string; first_bad_seq: string | null; head_seq: string; head_hash: string }>("SELECT * FROM jfa_verify_audit_chain()");
+    const d = db.rows[0];
+    const rows = await client.query<AuditRow>(`${SELECT_ROWS} WHERE seq IS NOT NULL AND seq <= $1 ORDER BY seq`, [d.head_seq]);
+    await client.query("COMMIT");
+    const independent = verifyAuditRows(rows.rows);
+    return {
+      ok: d.ok && independent.ok && independent.headHash === d.head_hash,
+      checked: Number(d.checked), firstBadSeq: d.first_bad_seq === null ? (independent.ok ? null : independent.firstBadSeq) : Number(d.first_bad_seq),
+      headSeq: Number(d.head_seq), headHash: d.head_hash, independent: independent.ok
+    };
+  } catch (e) { await client.query("ROLLBACK").catch(() => undefined); throw e; }
 }
 
 /** Current head, suitable for external anchoring (JFA-38) or a signed report. */
