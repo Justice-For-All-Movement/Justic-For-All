@@ -17,3 +17,5 @@ export { loadSubject, authorize, assertAuthorized, recordDenial, grantRole, revo
 export { recordConsent, consentStatus, requireConsent, exportConsent, listConsentEvents, ConsentRequiredError } from "./consent.ts";
 export { verifyAuditChain, verifyAuditRows, auditChainHead, listAuditEvents, auditEventHash, canonicalAuditString, GENESIS_HASH } from "./audit.ts";
 export type { AuditRow } from "./audit.ts";
+export { setPublicName, getOwnProfile } from "./pseudonym.ts";
+export type { SetNameResult } from "./pseudonym.ts";

@@ -31,6 +31,10 @@ export async function recordConsent(client: PoolClient, actorId: string, subject
       "SELECT id FROM core_current_consent WHERE subject_ref=$1 AND purpose=$2", [ref(subjectId), purpose.id]);
     await client.query(`INSERT INTO consent_records(subject_ref,purpose,scope,policy_version,decision,supersedes_id,channel)
       VALUES($1,$2,$3,$4,$5,$6,$7)`, [ref(subjectId), purpose.id, `core.${purpose.id}`, purpose.version, decision, prev.rows[0]?.id ?? null, channel]);
+    // Withdrawing display consent hides the public name immediately (JFA-22).
+    if (decision === "withdraw" && purpose.id === "public_display_name") {
+      await client.query("UPDATE profiles SET visibility='private',row_version=row_version+1 WHERE identity_id=$1 AND visibility='public'", [subjectId]);
+    }
     await client.query("INSERT INTO audit_events(actor_ref,action,resource_ref,policy_result) VALUES($1,$2,$3,'allow')",
       [actorId, decision === "grant" ? "consent_granted" : "consent_withdrawn", `consent:${purpose.id}:v${purpose.version}`]);
     await client.query("COMMIT");
