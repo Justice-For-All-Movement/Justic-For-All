@@ -34,7 +34,7 @@ async function write(actor,doc){
 try{
  const editor=await createActor("editor");
  const viewer=await createActor("viewer");
- const wrongScope=await createActor("editor","other");
+ const wrongScope=await createActor("editor","org:other");
  const deniedSlug="synthetic-denied-draft";
 
  await assert.rejects(write(viewer,document(deniedSlug)),/authorization/i);

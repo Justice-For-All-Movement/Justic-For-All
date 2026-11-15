@@ -13,3 +13,4 @@ export { requestSignInLink, consumeSignInLink, getSession, signOut, signOutEvery
 export type { IdentityDeps, SessionView, ConsumeResult, SignInRequestResult } from "./identity.ts";
 export { getSharedPool } from "./pool.ts";
 export type { PoolClient as DbClient } from "pg";
+export { loadSubject, authorize, assertAuthorized, recordDenial, grantRole, revokeRole, AuthorizationError } from "./authorization.ts";

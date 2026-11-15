@@ -1,5 +1,6 @@
 import {randomUUID} from "node:crypto";
 import type {PoolClient} from "pg";
+import {assertAuthorized} from "./authorization.ts";
 import {scanEditorialImage} from "../../../scripts/lib/editorial-upload.mjs";
 
 export type PrivateMediaStore={
@@ -32,12 +33,7 @@ export async function createEditorialImage(
  let uploaded=false,commitStarted=false;
  await client.query("BEGIN");
  try {
-  const auth=await client.query<{allowed:boolean}>(`SELECT EXISTS (
-   SELECT 1 FROM identities i JOIN role_grants r ON r.subject_id=i.id
-   WHERE i.id=$1 AND i.account_state='active' AND r.role IN ('editor','admin')
-   AND r.resource_scope='core' AND (r.expires_at IS NULL OR r.expires_at>now())
-  ) AS allowed`,[actorId]);
-  if(!auth.rows[0]?.allowed)throw new Error("Editor authorization required");
+  await assertAuthorized(client,actorId,"cms.upload_media");
   await store.putPrivate(objectKey,Buffer.from(uploadBytes),info.mime);
   uploaded=true;
   await client.query(`INSERT INTO cms_media_assets

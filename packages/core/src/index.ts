@@ -39,3 +39,5 @@ export { buildSiteIndex, searchSitePages, corePages } from "./site-search";
 export type { SitePage, SiteHit } from "./site-search";
 export { SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_META, MESSAGES, resolveLocale, t } from "./i18n";
 export type { Locale, MessageKey } from "./i18n";
+export { ROLES, PERMISSIONS, SCOPE, STEP_UP_WINDOW_MS, decide, mayGrant, isAction } from "./authorization";
+export type { Role, Action, Grant, Subject, Resource, Decision } from "./authorization";
