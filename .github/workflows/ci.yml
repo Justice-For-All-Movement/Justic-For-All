@@ -82,3 +82,11 @@ jobs:
         env:
           DATABASE_URL: postgres://jfa_ci:local_test_only@localhost:5432/jfa_ci
         run: node --experimental-strip-types packages/db/scripts/test-editorial-postgres.mjs
+      - name: Run PostgreSQL integration tests for database services
+        env:
+          PGHOST: localhost
+          PGUSER: jfa_ci
+          PGDATABASE: jfa_ci
+          PGPASSWORD: local_test_only
+          DATABASE_URL: postgres://jfa_ci:local_test_only@localhost:5432/jfa_ci
+        run: node --experimental-strip-types --test packages/db/tests/*.integration.mjs
