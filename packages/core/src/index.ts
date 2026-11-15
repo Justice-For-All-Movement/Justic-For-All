@@ -43,3 +43,5 @@ export { ROLES, PERMISSIONS, SCOPE, STEP_UP_WINDOW_MS, decide, mayGrant, isActio
 export type { Role, Action, Grant, Subject, Resource, Decision } from "./authorization";
 export { CONSENT_PURPOSES, findPurpose, summarizeConsent, hasConsent } from "./consent";
 export type { ConsentPurpose, ConsentEvent, ConsentState } from "./consent";
+export { checkPseudonym } from "./pseudonym";
+export type { PseudonymCheck } from "./pseudonym";

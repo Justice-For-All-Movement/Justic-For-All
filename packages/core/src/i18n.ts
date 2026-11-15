@@ -23,7 +23,8 @@ const en = {
   "nav.safety": "Safety",
   "nav.resources": "Resources",
   "nav.contact": "Contact",
-  "nav.accessibility": "Accessibility"
+  "nav.accessibility": "Accessibility",
+  "nav.anonymity": "Anonymity"
 } as const;
 export type MessageKey = keyof typeof en;
 

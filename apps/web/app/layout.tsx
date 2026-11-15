@@ -35,6 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Link href="/privacy">{t(locale, "nav.privacy")}</Link>{" · "}
             <Link href="/terms">{t(locale, "nav.terms")}</Link>{" · "}
             <Link href="/accessibility">{t(locale, "nav.accessibility")}</Link>{" · "}
+            <Link href="/anonymity">{t(locale, "nav.anonymity")}</Link>{" · "}
             <Link href="/safety">{t(locale, "nav.safety")}</Link>{" · "}
             <Link href="/resources">{t(locale, "nav.resources")}</Link>{" · "}
             <Link href="/contact">{t(locale, "nav.contact")}</Link>

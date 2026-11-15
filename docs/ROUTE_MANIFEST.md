@@ -24,6 +24,10 @@ Route | Purpose | Sensitive input
 /auth/verify/confirm (POST) | JFA-19 consume link, set `__Host-` session cookie | Single-use token
 /auth/sign-out (POST) | JFA-19 revoke session | Session cookie
 /account | JFA-19 sessions, sign-out everywhere, deactivate, delete request (noindex, no-store) | Session cookie, typed confirmation
+/anonymity | JFA-22 plain-language anonymity boundaries | None
+/account/public-name (POST) | JFA-22 set or hide a validated pseudonym (requires display consent) | Pseudonym
+/account/privacy | JFA-23 consent toggles | Session
+/account/consent/export | JFA-23 own consent history JSON (no-store) | Session
 /contact | JFA-16 contact center (public issue tracker, security policy; no form) | None
 /privacy | Interim privacy disclosure | None
 /terms | Interim information/terms boundary | None
