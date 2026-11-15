@@ -1,4 +1,4 @@
-# JFA-13A/C - Structured editorial draft foundation
+# JFA-13 — Structured editorial draft foundation
 
 **Scope:** Internal editorial document validation and an authorization-checked, append-only draft revision writer. This is **not** the complete JFA-13 work package.
 
@@ -11,13 +11,23 @@
 - Transaction-scoped PostgreSQL advisory locking serializes concurrent first writes for the same locale/slug, producing immutable versions rather than a uniqueness race.
 - Hosted PostgreSQL acceptance executes the real repository function for authorized, unauthorized, concurrent, rollback, audit and public-projection paths.
 - An unpublished draft never swaps the public `current_revision` of a previously published record. Current public view already requires `visibility='public'` plus `editorial_state='published'`.
-- No HTTP authoring route, identity enrollment, new storage provider, dynamic upload, or public preview of drafts is enabled.
+- No HTTP authoring route, identity enrollment, configured storage provider, dynamic upload, or public preview of drafts is enabled.
+
+## Scanned image staging
+
+- `inspectEditorialImage` bounds PNG/JPEG bytes to 10 MiB, validates PNG chunk boundaries/checksums and JPEG frame/scan boundaries, checks declared MIME and both formats' dimensions, and computes a SHA-256 digest. It rejects SVG, HTML, unknown formats, truncated or trailing data, EXIF/comments/text metadata and active/unknown extensions. Metadata-bearing files must first be converted to a safe derivative; no private metadata is silently retained. This preflight is neither a complete image decoder nor a malware scanner.
+- `createEditorialImage` requires a scanner that explicitly reports a clean verdict and its scanner ID, a private object-store adapter, and a trusted actor ID. It rechecks active editor/admin authorization in PostgreSQL, stores a non-public object, inserts private asset metadata and audit evidence in one database transaction. If an earlier step fails, it attempts to remove the staged object. An ambiguous commit is never compensated blindly.
+- The new `0002_editorial_media.sql` migration defines private asset metadata. Uploaded asset references are accepted only for images and only when the draft writer finds a clean asset owned by the editor. Existing external HTTPS references remain metadata only and are not fetched or embedded by preview.
+- No object-store provider or scanner is provisioned here. The upload service is internal and cannot be reached from a public route. The CI database job applies migration 0002 (twice, to prove replay safety) and runs `db/tests/003_editorial_media.sql`.
+- Upload bytes are copied before asynchronous scanning. Scanner buffers are isolated from caller and storage buffers; modification during scanning fails closed before database effects. Regression tests execute the TypeScript upload service with synthetic database/store adapters to check authorization, rollback, storage failure and uncertain-commit handling. These do not replace real PostgreSQL integration tests. The Node 22 test command enables its supported type-stripping flag for these runtime tests.
 
 ## Still required for full JFA-13 acceptance
 
 - Authenticated editor UI with practical field-based rich text editing and WCAG/keyboard review, once JFA-19 sessions and JFA-20 permissions are implemented or an equivalently verified secure admin boundary is established.
-- Actual media upload scanning, MIME/type verification, content size limits and safe object storage; current version accepts **metadata only**.
+- Configure and validate a real malware scanner and durable private object storage; connect them through an authenticated staff upload endpoint. Until then the intake contract is inert and no upload is exposed.
+- Real PostgreSQL integration tests for the upload transaction (storage failure/retry with a real object store).
 - A complete publication workflow under JFA-14 (independent reviewer approval, release, withdrawal, revision/caching guards) before a CMS page can be displayed publicly.
 - Verified security evidence under E2EESA with no blanket conformance claim.
 
 Any admin endpoint added later must authenticate the actor independently of user-supplied IDs and fail closed without required authorization. Do not represent a source-controlled validation library as a live CMS.
+

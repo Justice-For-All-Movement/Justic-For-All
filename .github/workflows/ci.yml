@@ -63,11 +63,21 @@ jobs:
         env:
           PGPASSWORD: local_test_only
         run: |
-          psql -h localhost -U jfa_ci -d jfa_ci -v ON_ERROR_STOP=1 -f db/migrations/0001_core.sql
-          psql -h localhost -U jfa_ci -d jfa_ci -v ON_ERROR_STOP=1 -f db/migrations/0001_core.sql
+          set -euo pipefail
+          migrations=$(ls db/migrations/[0-9][0-9][0-9][0-9]_*.sql | grep -v '_down\.sql$' | sort)
+          # Apply every forward migration twice to prove replay safety.
+          for pass in 1 2; do
+            for f in $migrations; do psql -h localhost -U jfa_ci -d jfa_ci -v ON_ERROR_STOP=1 -q -f "$f"; done
+          done
           psql -h localhost -U jfa_ci -d jfa_ci -v ON_ERROR_STOP=1 -f db/seeds/0001_demo.sql
-          psql -h localhost -U jfa_ci -d jfa_ci -v ON_ERROR_STOP=1 -f db/tests/001_schema_assertions.sql
-          psql -h localhost -U jfa_ci -d jfa_ci -v ON_ERROR_STOP=1 -f db/tests/002_editorial_draft_privacy.sql
+          for t in $(ls db/tests/*.sql | sort); do
+            echo "SQL test: $t"
+            psql -h localhost -U jfa_ci -d jfa_ci -v ON_ERROR_STOP=1 -q -f "$t"
+          done
+      - name: Exercise the deploy-time migration runner
+        env:
+          DATABASE_URL: postgres://jfa_ci:local_test_only@localhost:5432/jfa_ci
+        run: pnpm db:migrate
       - name: Exercise editorial draft repository against PostgreSQL
         env:
           DATABASE_URL: postgres://jfa_ci:local_test_only@localhost:5432/jfa_ci
