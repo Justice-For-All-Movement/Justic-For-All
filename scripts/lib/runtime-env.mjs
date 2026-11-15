@@ -15,11 +15,29 @@ export const RUNTIME_ENV=Object.freeze([
  {name:"APP_PUBLIC_URL",requiredIn:["production"],service:"Public origin (Render URL or custom domain)",
   purpose:"Canonical https origin for links, sitemap and Open Graph metadata.",
   validate:(v,env)=>isPublicOrigin(v,env.NODE_ENV==="production")},
+ {name:"IDENTITY_LOOKUP_KEY",requiredIn:[],service:"Accounts (JFA-19)",secret:true,
+  purpose:"32-byte base64 key for keyed email lookup and throttle buckets; accounts stay closed without it.",
+  validate:v=>isKey(v)},
+ {name:"CONTACT_ENCRYPTION_KEY",requiredIn:[],service:"Accounts (JFA-19)",secret:true,
+  purpose:"32-byte base64 AES-256-GCM key sealing stored email addresses; must differ from IDENTITY_LOOKUP_KEY.",
+  validate:(v,env)=>isKey(v)&&v!==env.IDENTITY_LOOKUP_KEY},
+ {name:"EMAIL_PROVIDER",requiredIn:[],service:"Transactional email",
+  purpose:"disabled (default) | resend; memory/log are development-only and refused in production.",
+  validate:(v,env)=>["disabled","resend"].includes(v)||(env.NODE_ENV!=="production"&&["memory","log"].includes(v))},
+ {name:"EMAIL_PROVIDER_API_KEY",requiredIn:[],service:"Resend (when EMAIL_PROVIDER=resend)",secret:true,
+  purpose:"Provider API key.",validate:v=>v.length>=8&&!/\s/.test(v)},
+ {name:"EMAIL_FROM_ADDRESS",requiredIn:[],service:"Resend (verified sender domain)",
+  purpose:"Verified sender, e.g. Justice For All <no-reply@example.org>.",
+  validate:v=>/^([^<>@\r\n]{1,80} <)?[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+>?$/.test(v)},
  {name:"PORT",requiredIn:[],service:"Render (injected automatically)",purpose:"Listen port; defaults to 3000.",
   validate:v=>/^\d{2,5}$/.test(v)&&Number(v)<65536},
  {name:"HOST",requiredIn:[],service:"Render",purpose:"Bind address; defaults to 0.0.0.0.",
   validate:v=>/^[0-9a-f.:]+$/i.test(v)||v==="localhost"},
 ]);
+
+function isKey(v){
+ try{return Buffer.from(v.trim(),/[-_]/.test(v)?"base64url":"base64").length===32;}catch{return false;}
+}
 
 export function isPublicOrigin(value,production){
  try{
@@ -42,5 +60,7 @@ export function checkRuntimeEnv(env,spec=RUNTIME_ENV){
   }
   if(!item.validate(value,env))problems.push(`${item.name} is invalid (${item.purpose})`);
  }
+ if(env.EMAIL_PROVIDER==="resend"&&(!env.EMAIL_PROVIDER_API_KEY||!env.EMAIL_FROM_ADDRESS))
+  problems.push("EMAIL_PROVIDER=resend needs EMAIL_PROVIDER_API_KEY and EMAIL_FROM_ADDRESS");
  return {ok:problems.length===0,problems};
 }

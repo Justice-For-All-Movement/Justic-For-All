@@ -9,3 +9,7 @@ export { readPublishedEditorial, loadPublishedEditorial } from "./published-edit
 export type { PublicEditorial } from "./published-editorial";
 export { parseSearchQuery, searchPublicContent, loadPublicSearch, loadSitemapArticles, splitHighlight, SEARCH_TYPES, SEARCH_PAGE_SIZE, SEARCH_MAX_PAGE } from "./public-search";
 export type { SearchQuery, PublicSearchHit, PublicSearchResult, SnippetPart, SearchType } from "./public-search";
+export { requestSignInLink, consumeSignInLink, getSession, signOut, signOutEverywhere, deactivateAccount, requestAccountDeletion, countActiveSessions, SIGN_IN_TTL_MINUTES, SESSION_ABSOLUTE_DAYS } from "./identity.ts";
+export type { IdentityDeps, SessionView, ConsumeResult, SignInRequestResult } from "./identity.ts";
+export { getSharedPool } from "./pool.ts";
+export type { PoolClient as DbClient } from "pg";

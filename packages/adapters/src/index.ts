@@ -7,3 +7,6 @@ export type AdapterStatus = Readonly<{ availability: AdapterAvailability; integr
 export function disconnectedAdapter(integrationId: string): AdapterStatus {
   return { integrationId, availability: "unconfigured" };
 }
+
+export { disabledEmailSender, createMemoryEmailSender, createLogEmailSender, createResendEmailSender, emailSenderFromEnv, isFromAddress } from "./email.ts";
+export type { EmailSender, EmailMessage, EmailCategory, SendResult } from "./email.ts";
