@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { MAX_EVENT_BYTES, parseKeyRing, validateEnvelope, verifyWebhook } from "@jfa/adapters";
 import { getSharedPool, ingestEvent } from "@jfa/db";
+import { clientAddress, rateLimit } from "../../../../../../lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ sou
   const { source } = await params;
   const ring = parseKeyRing(process.env.SERVICE_WEBHOOK_SIGNING_KEYS);
   if (!ring.size) return reply(503, "ingestion_not_configured");
+  if (!rateLimit(`events:${source}:${clientAddress(request)}`, 600, 60_000).allowed) return reply(429, "rate_limited");
   const length = Number(request.headers.get("content-length") ?? "0");
   if (length > MAX_EVENT_BYTES) return reply(413, "payload_too_large");
   const body = await request.text();
