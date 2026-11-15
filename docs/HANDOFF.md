@@ -22,3 +22,10 @@
 ## Open decisions
 
 License and media rights, domain, Render/Neon credentials and billing, CMS editorial personnel, contact/security channels, and audit/conformance evidence. Choose safe documented engineering defaults, but escalate material product decisions.
+
+## Deployment configuration
+
+- Blueprint: [`render.yaml`](../render.yaml). Runbook: [DEPLOYMENT_RENDER.md](DEPLOYMENT_RENDER.md).
+- Build: `corepack enable && pnpm install --frozen-lockfile && pnpm build`. Start: `pnpm start:render` (env check → migrations → `next start` on `$HOST:$PORT`).
+- Required in production: `NODE_ENV=production`, `DATABASE_URL` (Neon, `sslmode=require`), `APP_PUBLIC_URL` (bare https origin).
+- Optional provider variables are declared in `scripts/lib/runtime-env.mjs`. Every one is disabled when unset.
