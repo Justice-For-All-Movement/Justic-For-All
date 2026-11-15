@@ -32,7 +32,7 @@ export async function recordConsent(client: PoolClient, actorId: string, subject
     await client.query(`INSERT INTO consent_records(subject_ref,purpose,scope,policy_version,decision,supersedes_id,channel)
       VALUES($1,$2,$3,$4,$5,$6,$7)`, [ref(subjectId), purpose.id, `core.${purpose.id}`, purpose.version, decision, prev.rows[0]?.id ?? null, channel]);
     await client.query("INSERT INTO audit_events(actor_ref,action,resource_ref,policy_result) VALUES($1,$2,$3,'allow')",
-      [actorId, decision === "grant" ? "consent_granted" : "consent_withdrawn", `consent:${purpose.id}@${purpose.version}`]);
+      [actorId, decision === "grant" ? "consent_granted" : "consent_withdrawn", `consent:${purpose.id}:v${purpose.version}`]);
     await client.query("COMMIT");
   } catch (e) { await client.query("ROLLBACK").catch(() => undefined); throw e; }
   return (await consentStatus(client, subjectId)).find(s => s.purpose === purpose.id)!;
