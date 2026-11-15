@@ -26,7 +26,7 @@ License and media rights, domain, Render/Neon credentials and billing, CMS edito
 ## Deployment configuration
 
 - Blueprint: [`render.yaml`](../render.yaml). Runbook: [DEPLOYMENT_RENDER.md](DEPLOYMENT_RENDER.md). Nothing has been provisioned.
-- **Build:** `corepack enable && pnpm install --frozen-lockfile && pnpm build`
+- **Build:** `corepack enable && pnpm install --frozen-lockfile --prod=false && pnpm build`
 - **Start:** `pnpm start:render` = `node scripts/check-runtime-env.mjs && pnpm db:migrate && pnpm start` (`next start --hostname ${HOST:-0.0.0.0} --port ${PORT:-3000}`). Migrations are locked and idempotent, and a failure keeps the previous release serving. Health check: `/health`. Readiness: `/ready`.
 - The source of truth for variables is `scripts/lib/runtime-env.mjs` (validated at start; names only are printed).
 
