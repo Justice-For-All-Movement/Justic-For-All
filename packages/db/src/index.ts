@@ -14,3 +14,4 @@ export type { IdentityDeps, SessionView, ConsumeResult, SignInRequestResult } fr
 export { getSharedPool } from "./pool.ts";
 export type { PoolClient as DbClient } from "pg";
 export { loadSubject, authorize, assertAuthorized, recordDenial, grantRole, revokeRole, AuthorizationError } from "./authorization.ts";
+export { recordConsent, consentStatus, requireConsent, exportConsent, listConsentEvents, ConsentRequiredError } from "./consent.ts";

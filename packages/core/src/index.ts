@@ -41,3 +41,5 @@ export { SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_META, MESSAGES, resolveLocale
 export type { Locale, MessageKey } from "./i18n";
 export { ROLES, PERMISSIONS, SCOPE, STEP_UP_WINDOW_MS, decide, mayGrant, isAction } from "./authorization";
 export type { Role, Action, Grant, Subject, Resource, Decision } from "./authorization";
+export { CONSENT_PURPOSES, findPurpose, summarizeConsent, hasConsent } from "./consent";
+export type { ConsentPurpose, ConsentEvent, ConsentState } from "./consent";

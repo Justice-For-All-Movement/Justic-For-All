@@ -9,7 +9,7 @@ import { forbidden, seeOther } from "./http";
  * Shared guard for signed-in account POSTs: same-origin, valid session and,
  * for destructive actions, an explicit typed confirmation.
  */
-export async function accountAction(request: Request, opts: { confirm?: string; done: string },
+export async function accountAction(request: Request, opts: { confirm?: string; done: string; keepSession?: boolean },
   act: (client: DbClient, session: SessionView) => Promise<void>): Promise<NextResponse> {
   if (!isSameOriginPost(request)) return forbidden();
   const pool = getSharedPool();
@@ -28,6 +28,6 @@ export async function accountAction(request: Request, opts: { confirm?: string; 
     return seeOther(request, "/account?status=error");
   }
   const response = seeOther(request, opts.done);
-  response.cookies.delete(sessionCookieName());
+  if (!opts.keepSession) response.cookies.delete(sessionCookieName());
   return response;
 }

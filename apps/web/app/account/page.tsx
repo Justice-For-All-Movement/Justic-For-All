@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { countActiveSessions, getSharedPool } from "@jfa/db";
 import { currentSession } from "../../lib/auth";
@@ -27,6 +28,7 @@ export default async function Account({ searchParams }: Context) {
       <form method="post" action="/auth/sign-out"><button className="ui-button" type="submit">Sign out</button></form>
       <form method="post" action="/account/sign-out-everywhere"><button className="ui-button" type="submit">Sign out on every device</button></form>
     </section>
+    <p><Link href="/account/privacy">Privacy choices and consent history</Link></p>
     <section aria-labelledby="deactivate-h"><h2 id="deactivate-h">Deactivate account</h2>
       <p>Ends every session and stops sign-in. Your data is kept until you ask us to delete it.</p>
       <form method="post" action="/account/deactivate">

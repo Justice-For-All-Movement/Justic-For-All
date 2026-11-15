@@ -32,10 +32,10 @@ BEGIN
  IF NOT blocked THEN RAISE EXCEPTION 'unapproved public projection was accepted'; END IF;
 
  INSERT INTO consent_records(subject_ref,purpose,scope,policy_version,decision)
-  VALUES ('synthetic-subject','notifications','test','1','grant');
+  VALUES ('identity:00000000-0000-4000-8000-000000000001','notifications','test','2026-01-01','grant');
  blocked:=false;
  BEGIN
-  UPDATE consent_records SET decision='withdraw' WHERE subject_ref='synthetic-subject';
+  UPDATE consent_records SET decision='withdraw' WHERE subject_ref='identity:00000000-0000-4000-8000-000000000001';
  EXCEPTION WHEN raise_exception THEN blocked:=true;
  END;
  IF NOT blocked THEN RAISE EXCEPTION 'immutable consent record was modified'; END IF;
