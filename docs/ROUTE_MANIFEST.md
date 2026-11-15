@@ -15,6 +15,9 @@ Route | Purpose | Sensitive input
 /safety | JFA-16 participation safety guidance | None
 /search | JFA-17 approved-only search (GET, noindex) | Search terms only, never stored
 /api/v1/search | JFA-17 search API (no-store, noindex) | Search terms only, never stored
+/accessibility | JFA-18 accessibility statement (no conformance claim) | None
+/sitemap.xml | JFA-18 indexable public pages and current published articles; empty without APP_PUBLIC_URL | None
+/robots.txt | JFA-18 crawler rules (disallows /api/, /search, /design-system, /health, /ready) | None
 /contact | JFA-16 contact center (public issue tracker, security policy; no form) | None
 /privacy | Interim privacy disclosure | None
 /terms | Interim information/terms boundary | None

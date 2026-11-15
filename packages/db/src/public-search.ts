@@ -85,3 +85,16 @@ export async function loadPublicSearch(query: SearchQuery, env: NodeJS.ProcessEn
     return { status: "unavailable" };
   }
 }
+
+/** Current published articles for the sitemap; empty (never an error) when the DB is unavailable. */
+export async function loadSitemapArticles(env: NodeJS.ProcessEnv = process.env): Promise<{ slug: string; publishedAt: string }[]> {
+  const pool = getSharedPool(env);
+  if (!pool) return [];
+  try {
+    const result = await pool.query<{ slug: string; published_at: Date }>(
+      "SELECT slug, published_at FROM core_public_search WHERE locale = 'en' ORDER BY published_at DESC LIMIT 5000");
+    return result.rows.map(r => ({ slug: r.slug, publishedAt: r.published_at.toISOString() }));
+  } catch {
+    return [];
+  }
+}
