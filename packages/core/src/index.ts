@@ -32,3 +32,6 @@ export const initiatives: readonly Initiative[] = Object.freeze(
 export function findPublicInitiative(slug: string): Initiative | undefined {
   return initiatives.find(item => item.slug === slug);
 }
+
+export { participationPaths, participationAvailability, publicResources } from "./participation";
+export type { ParticipationPath, PathAvailability, PublicResource } from "./participation";

@@ -8,8 +8,12 @@ Route | Purpose | Sensitive input
 /records | Records program information; no filing | None
 /principles | Civic principles | None
 /initiatives | Validated public informational initiative directory | None
-/initiatives/[slug] | Approved public informational initiative detail | None\n/articles/{slug} | Current reviewed published editorial article | Validated slug only
-/get-involved | Safe public participation information | None
+/initiatives/[slug] | Approved public informational initiative detail | None
+/articles/{slug} | Current reviewed published editorial article | Validated slug only
+/get-involved | JFA-16 participation paths with honest availability | None
+/resources | JFA-16 curated internal and official-government resources | None
+/safety | JFA-16 participation safety guidance | None
+/contact | JFA-16 contact center (public issue tracker, security policy; no form) | None
 /privacy | Interim privacy disclosure | None
 /terms | Interim information/terms boundary | None
 /design-system | UI reference | None

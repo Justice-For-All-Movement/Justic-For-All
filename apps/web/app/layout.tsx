@@ -25,7 +25,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <span>Justice For All</span>
           <nav aria-label="Legal information">
             <Link href="/privacy">Privacy</Link>{" · "}
-            <Link href="/terms">Site information</Link>
+            <Link href="/terms">Site information</Link>{" · "}
+            <Link href="/safety">Safety</Link>{" · "}
+            <Link href="/resources">Resources</Link>{" · "}
+            <Link href="/contact">Contact</Link>
           </nav>
           <span>Information only. Sensitive submissions are not accepted on this site.</span>
         </footer>
