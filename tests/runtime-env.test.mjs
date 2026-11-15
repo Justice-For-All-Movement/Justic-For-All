@@ -32,7 +32,7 @@ test("render blueprint matches the runtime contract",()=>{
  const yaml=readFileSync("render.yaml","utf8");
  assert.match(yaml,/runtime: node/);
  assert.match(yaml,/key: NODE_VERSION\s+value: 22\./);
- assert.match(yaml,/buildCommand: .*pnpm install --frozen-lockfile && pnpm build/);
+ assert.match(yaml,/buildCommand: .*pnpm install --frozen-lockfile --prod=false && pnpm build/,"devDependencies must install even with NODE_ENV=production");
  assert.match(yaml,/startCommand: pnpm start:render/);
  assert.match(yaml,/healthCheckPath: \/health/);
  assert.match(yaml,/key: HOST\s+value: 0\.0\.0\.0/);

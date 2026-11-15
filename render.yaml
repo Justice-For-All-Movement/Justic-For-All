@@ -11,7 +11,7 @@ services:
     plan: free
     branch: main
     autoDeploy: true
-    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    buildCommand: corepack enable && pnpm install --frozen-lockfile --prod=false && pnpm build
     # Migrations run before the server binds. The runner holds a PostgreSQL
     # advisory lock and skips applied versions, so restarts and parallel
     # instances are safe. A failed migration fails the deploy, so Render

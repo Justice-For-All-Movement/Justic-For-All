@@ -1,6 +1,8 @@
 # Render deployment runbook (core web service)
 
-**Status:** blueprint and start path verified locally. **No Render service or Neon database has been created by this repository or its agents.** An authorized operator deploys using the steps below.
+**Status:** deployed by the lead engineer on 2026-11-15 as Render web service `justice-for-all-web` at **https://justice-for-all-web.onrender.com** (native Node runtime, free plan, its own Neon PostgreSQL 16 database, identity keys set, `EMAIL_PROVIDER=disabled` so accounts show "not open yet"). This is a preview deployment, not the JFA-49 production launch. No secrets are recorded in this repository.
+
+**Deploy finding:** Render exports `NODE_ENV=production` during the build, and pnpm then skips devDependencies (TypeScript and types needed by `next build`). The build command therefore passes `--prod=false`.
 
 ## What `render.yaml` defines
 
@@ -8,7 +10,7 @@
 |---|---|---|
 | Runtime | Node `22.16.0` (`NODE_VERSION`, matches `.node-version`) | Supported LTS; `@types/node` is pinned to 22.x |
 | Plan | `free` | Avoids unapproved cost. Moving to a paid plan needs owner approval |
-| Build | `corepack enable && pnpm install --frozen-lockfile && pnpm build` | Corepack activates the pinned `pnpm@10.18.3` from `packageManager` |
+| Build | `corepack enable && pnpm install --frozen-lockfile --prod=false && pnpm build` | Corepack activates the pinned `pnpm@10.18.3`; `--prod=false` keeps devDependencies despite `NODE_ENV=production` |
 | Start | `pnpm start:render` | `check-runtime-env` → `db:migrate` → `next start --hostname $HOST --port $PORT` |
 | Health check | `/health` | Process liveness. `/ready` additionally checks DB + migration |
 | Auto-deploy | on, from `main` | Only CI-green PRs are merged to `main` |
@@ -65,7 +67,7 @@ Every optional provider integration runs behind an interface. When its variables
 ```bash
 export NODE_ENV=production PORT=10000 HOST=0.0.0.0 APP_PUBLIC_URL=https://jfa.example.org
 export DATABASE_URL='postgres://user:pass@localhost:5432/jfa?sslmode=require'   # local PG with SSL
-corepack enable && pnpm install --frozen-lockfile && pnpm build
+corepack enable && pnpm install --frozen-lockfile --prod=false && pnpm build
 pnpm start:render
 curl -s localhost:10000/ready
 ```
