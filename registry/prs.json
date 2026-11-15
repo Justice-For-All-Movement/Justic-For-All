@@ -10,7 +10,7 @@
   ],
   "schemaVersion": 1,
   "roadmapVersion": 1,
-  "observedAt": "2026-11-15T18:46:27Z",
+  "observedAt": "2026-11-15T19:33:54Z",
   "units": [
     {
       "id": "JFA-001",
@@ -217,7 +217,9 @@
       "id": "JFA-019",
       "title": "Identity privacy and moderation — approved package 1 of 11",
       "origin": "original",
-      "prs": [],
+      "prs": [
+        50
+      ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": []
@@ -235,7 +237,9 @@
       "id": "JFA-021",
       "title": "Identity privacy and moderation — approved package 3 of 11",
       "origin": "original",
-      "prs": [],
+      "prs": [
+        51
+      ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": []
@@ -244,7 +248,9 @@
       "id": "JFA-022",
       "title": "Identity privacy and moderation — approved package 4 of 11",
       "origin": "original",
-      "prs": [],
+      "prs": [
+        54
+      ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": []
@@ -253,7 +259,9 @@
       "id": "JFA-023",
       "title": "Identity privacy and moderation — approved package 5 of 11",
       "origin": "original",
-      "prs": [],
+      "prs": [
+        52
+      ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": []
@@ -262,7 +270,9 @@
       "id": "JFA-024",
       "title": "Identity privacy and moderation — approved package 6 of 11",
       "origin": "original",
-      "prs": [],
+      "prs": [
+        57
+      ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": []
@@ -280,7 +290,9 @@
       "id": "JFA-026",
       "title": "Identity privacy and moderation — approved package 8 of 11",
       "origin": "original",
-      "prs": [],
+      "prs": [
+        58
+      ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": []
@@ -289,7 +301,9 @@
       "id": "JFA-027",
       "title": "Identity privacy and moderation — approved package 9 of 11",
       "origin": "original",
-      "prs": [],
+      "prs": [
+        59
+      ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": []
@@ -298,7 +312,10 @@
       "id": "JFA-028",
       "title": "Identity privacy and moderation — approved package 10 of 11",
       "origin": "original",
-      "prs": [],
+      "prs": [
+        53,
+        60
+      ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": []
@@ -310,13 +327,18 @@
       "prs": [],
       "dependsOn": [],
       "externalDependencies": [],
-      "externalPrerequisites": []
+      "externalPrerequisites": [],
+      "contributingPrs": [
+        56
+      ]
     },
     {
       "id": "JFA-030",
       "title": "Cross-platform integrations — approved package 1 of 11",
       "origin": "original",
-      "prs": [],
+      "prs": [
+        55
+      ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": []
@@ -506,6 +528,186 @@
     }
   ],
   "pullRequests": [
+    {
+      "id": 5326356728,
+      "number": 60,
+      "title": "fix(audit): Snapshot-consistent chain verification under concurrent writes",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/60",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T19:32:28Z",
+      "updatedAt": "2026-11-15T19:33:27Z",
+      "closedAt": "2026-11-15T19:33:27Z",
+      "mergedAt": "2026-11-15T19:33:27Z",
+      "headSha": "22e9a2adb2872bc07421e498861218a99654d45f",
+      "baseRef": "main",
+      "mergeCommitSha": "042d7db1b3f41a2cf2b5127c34fdd7314b5865af"
+    },
+    {
+      "id": 5326332553,
+      "number": 59,
+      "title": "JFA-27: Privacy requests, data export, legal hold and crypto-shred erasure",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/59",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T19:29:42Z",
+      "updatedAt": "2026-11-15T19:32:34Z",
+      "closedAt": "2026-11-15T19:30:45Z",
+      "mergedAt": "2026-11-15T19:30:45Z",
+      "headSha": "a28deee7fe9542377fbdb9d0f4f24e9f4ef08359",
+      "baseRef": "main",
+      "mergeCommitSha": "5ba63110833d29a1fbc004ebad93a22d4bff0558"
+    },
+    {
+      "id": 5326308300,
+      "number": 58,
+      "title": "JFA-26: Content reporting, temporary holds, appeals and reporter protection",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/58",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T19:26:54Z",
+      "updatedAt": "2026-11-15T19:29:38Z",
+      "closedAt": "2026-11-15T19:29:37Z",
+      "mergedAt": "2026-11-15T19:29:37Z",
+      "headSha": "85e5537f0a7acbee28a39ced7888f07fdddeaed9",
+      "baseRef": "main",
+      "mergeCommitSha": "d970329eecf182938004c280e6415bb4e6c4dc68"
+    },
+    {
+      "id": 5326281619,
+      "number": 57,
+      "title": "JFA-24: Double opt-in subscriptions, one-click unsubscribe and gated delivery",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/57",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T19:24:00Z",
+      "updatedAt": "2026-11-15T19:26:49Z",
+      "closedAt": "2026-11-15T19:26:49Z",
+      "mergedAt": "2026-11-15T19:26:49Z",
+      "headSha": "e80d53341d764efbbd0d3dec73e1661dda98baee",
+      "baseRef": "main",
+      "mergeCommitSha": "689db0a52f074737f30700ad27055e44dfc20038"
+    },
+    {
+      "id": 5326246759,
+      "number": 56,
+      "title": "JFA-29: CSP/HSTS headers, public rate limits and ASVS control map",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/56",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T19:20:13Z",
+      "updatedAt": "2026-11-15T19:23:56Z",
+      "closedAt": "2026-11-15T19:23:56Z",
+      "mergedAt": "2026-11-15T19:23:56Z",
+      "headSha": "66eddd2acd8d3d5e2c41eea8e29e806c9c01c332",
+      "baseRef": "main",
+      "mergeCommitSha": "c20f4640570dbaab8ddf24844672a2c2a9b51794"
+    },
+    {
+      "id": 5326202434,
+      "number": 55,
+      "title": "JFA-30: Adapter SDK, signed event ingestion, idempotent inbox and leased outbox",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/55",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T19:15:41Z",
+      "updatedAt": "2026-11-15T19:20:09Z",
+      "closedAt": "2026-11-15T19:20:09Z",
+      "mergedAt": "2026-11-15T19:20:09Z",
+      "headSha": "c33a0e8d3a84c60675a970bf107a8abc2a3920c0",
+      "baseRef": "main",
+      "mergeCommitSha": "fe6a07f63faae1f187a1ea611c5ff82a9413039a"
+    },
+    {
+      "id": 5326143959,
+      "number": 54,
+      "title": "JFA-22: Consented public pseudonyms and plain-language anonymity boundaries",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/54",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T19:09:47Z",
+      "updatedAt": "2026-11-15T19:14:50Z",
+      "closedAt": "2026-11-15T19:14:49Z",
+      "mergedAt": "2026-11-15T19:14:49Z",
+      "headSha": "81736ed6ec5121a4c232119140f45d3fbbfcace7",
+      "baseRef": "main",
+      "mergeCommitSha": "7cdd5dcb9cf4ad2146b266010d59fcb63f762167"
+    },
+    {
+      "id": 5326109607,
+      "number": 53,
+      "title": "JFA-28: Tamper-evident hash-chained audit log",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/53",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T19:05:57Z",
+      "updatedAt": "2026-11-15T19:09:32Z",
+      "closedAt": "2026-11-15T19:09:31Z",
+      "mergedAt": "2026-11-15T19:09:31Z",
+      "headSha": "33d7de24e3d1969813384c3f0637fd5b5fc8b088",
+      "baseRef": "main",
+      "mergeCommitSha": "6d92c834bade77d2d9a706dc3c91acc7d3d636f4"
+    },
+    {
+      "id": 5326069813,
+      "number": 52,
+      "title": "JFA-23: Append-only consent ledger and self-service privacy choices",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/52",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T19:01:25Z",
+      "updatedAt": "2026-11-15T19:05:35Z",
+      "closedAt": "2026-11-15T19:05:35Z",
+      "mergedAt": "2026-11-15T19:05:35Z",
+      "headSha": "4c06f736e29a31f196ad2694976f898a43126f1c",
+      "baseRef": "main",
+      "mergeCommitSha": "e7f73d7120a0b9afecf79afaa8aa4c10c2a7ecfb"
+    },
+    {
+      "id": 5326045533,
+      "number": 51,
+      "title": "JFA-21: Central RBAC/ABAC policy with database-enforced, revocable grants",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/51",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T18:58:33Z",
+      "updatedAt": "2026-11-15T19:01:21Z",
+      "closedAt": "2026-11-15T19:01:21Z",
+      "mergedAt": "2026-11-15T19:01:20Z",
+      "headSha": "8be542819f3ef150a72dc714c70313a7e31216b3",
+      "baseRef": "main",
+      "mergeCommitSha": "5b6636f6bc63bba73982d8397cdc66998cd376b6"
+    },
+    {
+      "id": 5326010211,
+      "number": 50,
+      "title": "JFA-19: Passwordless email-link identity, opaque sessions and account lifecycle",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/50",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T18:54:31Z",
+      "updatedAt": "2026-11-15T18:58:29Z",
+      "closedAt": "2026-11-15T18:58:29Z",
+      "mergedAt": "2026-11-15T18:58:29Z",
+      "headSha": "9a6b22b212ec64e6b57a3388ec37596369ec6aa5",
+      "baseRef": "main",
+      "mergeCommitSha": "3e8f5fa8ff398fb3a889ab5103fb7ef68c3d2d13"
+    },
+    {
+      "id": 5325948024,
+      "number": 49,
+      "title": "registry: Sync PR observations and map JFA-13..18 to merged PRs",
+      "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/49",
+      "state": "closed",
+      "draft": false,
+      "createdAt": "2026-11-15T18:47:06Z",
+      "updatedAt": "2026-11-15T18:54:10Z",
+      "closedAt": "2026-11-15T18:54:10Z",
+      "mergedAt": "2026-11-15T18:54:10Z",
+      "headSha": "2ff73d5d6675f57ba77f9df76765b848baaa71ec",
+      "baseRef": "main",
+      "mergeCommitSha": "23ce8ec06271ce1d1ff0d2a0fe5e6fbeed7a804b"
+    },
     {
       "id": 5325931206,
       "number": 48,
@@ -766,11 +968,11 @@
       "number": 31,
       "title": "JFA-028: Identity privacy and moderation — approved package 10 of 11",
       "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/31",
-      "state": "open",
+      "state": "closed",
       "draft": true,
       "createdAt": "2026-10-18T22:30:14Z",
-      "updatedAt": "2026-10-18T22:30:14Z",
-      "closedAt": null,
+      "updatedAt": "2026-11-15T19:05:59Z",
+      "closedAt": "2026-11-15T19:05:59Z",
       "mergedAt": null,
       "headSha": "c1dc70e86c425e0b9756a379dbe6ddeb269ca4ba",
       "baseRef": "main",
@@ -781,11 +983,11 @@
       "number": 30,
       "title": "JFA-023: Identity privacy and moderation — approved package 5 of 11",
       "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/30",
-      "state": "open",
+      "state": "closed",
       "draft": true,
       "createdAt": "2026-10-18T22:28:39Z",
-      "updatedAt": "2026-10-18T22:28:39Z",
-      "closedAt": null,
+      "updatedAt": "2026-11-15T19:01:27Z",
+      "closedAt": "2026-11-15T19:01:27Z",
       "mergedAt": null,
       "headSha": "d6499711124e7fe76858ad2fd9372a9008fc3e5d",
       "baseRef": "main",
@@ -796,11 +998,11 @@
       "number": 29,
       "title": "JFA-021: Identity privacy and moderation — approved package 3 of 11",
       "url": "https://github.com/Justice-For-All-Movement/Justic-For-All/pull/29",
-      "state": "open",
+      "state": "closed",
       "draft": true,
       "createdAt": "2026-10-18T22:27:45Z",
-      "updatedAt": "2026-10-18T22:27:45Z",
-      "closedAt": null,
+      "updatedAt": "2026-11-15T18:58:35Z",
+      "closedAt": "2026-11-15T18:58:35Z",
       "mergedAt": null,
       "headSha": "b1038c6f2b73eadf680eea77b3b5f51cf16a906a",
       "baseRef": "main",
