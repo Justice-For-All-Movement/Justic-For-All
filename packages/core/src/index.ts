@@ -35,3 +35,5 @@ export function findPublicInitiative(slug: string): Initiative | undefined {
 
 export { participationPaths, participationAvailability, publicResources } from "./participation";
 export type { ParticipationPath, PathAvailability, PublicResource } from "./participation";
+export { buildSiteIndex, searchSitePages, corePages } from "./site-search";
+export type { SitePage, SiteHit } from "./site-search";
