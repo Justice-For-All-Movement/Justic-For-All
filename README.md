@@ -2,7 +2,7 @@
 
 The shared public website, initiative directory, editorial experience, consent boundaries and integration shell for **Justice For All**.
 
-**Status:** foundation work in progress. The website is **not deployed**, no private-submission workflow is available, and downstream initiative services must be verified independently.
+**Status:** core public, editorial, account, consent, moderation, privacy and integration foundations are source-merged and tested (see [docs/ROADMAP.md](docs/ROADMAP.md)). The website is **not deployed** (a Render blueprint is ready), no private-submission workflow is available, and downstream initiative services must be verified independently.
 
 ## Start here
 

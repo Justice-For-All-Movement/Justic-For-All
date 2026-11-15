@@ -1,6 +1,6 @@
 # Independent developer / agent handoff
 
-**Authoritative scope:** [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) (50 numbered work packages). **Current product:** early static public portal; do not assume real submission, login, moderation, or deployed production.
+**Authoritative scope:** [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) (50 numbered work packages). **Current product (2026-11-15):** a public portal with editorial publishing, search, participation hub, optional accounts, consent, subscriptions, moderation, privacy requests, audit chain and signed integration inbox/outbox, all source-merged and tested. It is **not deployed** (blueprint ready), no external provider is configured, and there is no staff UI. See the status table in [ROADMAP.md](ROADMAP.md).
 
 ## First actions in another account
 
@@ -25,7 +25,40 @@ License and media rights, domain, Render/Neon credentials and billing, CMS edito
 
 ## Deployment configuration
 
-- Blueprint: [`render.yaml`](../render.yaml). Runbook: [DEPLOYMENT_RENDER.md](DEPLOYMENT_RENDER.md).
-- Build: `corepack enable && pnpm install --frozen-lockfile && pnpm build`. Start: `pnpm start:render` (env check → migrations → `next start` on `$HOST:$PORT`).
-- Required in production: `NODE_ENV=production`, `DATABASE_URL` (Neon, `sslmode=require`), `APP_PUBLIC_URL` (bare https origin).
-- Optional provider variables are declared in `scripts/lib/runtime-env.mjs`. Every one is disabled when unset.
+- Blueprint: [`render.yaml`](../render.yaml). Runbook: [DEPLOYMENT_RENDER.md](DEPLOYMENT_RENDER.md). Nothing has been provisioned.
+- **Build:** `corepack enable && pnpm install --frozen-lockfile && pnpm build`
+- **Start:** `pnpm start:render` = `node scripts/check-runtime-env.mjs && pnpm db:migrate && pnpm start` (`next start --hostname ${HOST:-0.0.0.0} --port ${PORT:-3000}`). Migrations are locked and idempotent, and a failure keeps the previous release serving. Health check: `/health`. Readiness: `/ready`.
+- The source of truth for variables is `scripts/lib/runtime-env.mjs` (validated at start; names only are printed).
+
+| Variable | Required? | Service | Effect when unset |
+|---|---|---|---|
+| `NODE_ENV=production` | **Required** | Node runtime | Start-up check fails |
+| `DATABASE_URL` | **Required** | Neon PostgreSQL (`sslmode=require`) | Start-up check fails |
+| `APP_PUBLIC_URL` | **Required** | Public https origin (Render URL or domain); set before the first build | Start-up check fails; no canonical/sitemap host |
+| `HOST`, `PORT`, `NODE_VERSION` | Set by blueprint/Render | Render | Defaults 0.0.0.0 / 3000 |
+| `IDENTITY_LOOKUP_KEY`, `CONTACT_ENCRYPTION_KEY` | Optional (pair) | App secrets (two different 32-byte base64 keys) | Accounts closed ("not open yet") |
+| `EMAIL_PROVIDER` (`resend`), `EMAIL_PROVIDER_API_KEY`, `EMAIL_FROM_ADDRESS` | Optional | Resend (verified sender domain) | Sign-in links and news email unavailable |
+| `SERVICE_WEBHOOK_SIGNING_KEYS` | Optional | Per-module HMAC keys (JSON) | Event ingestion returns 503 |
+| `OUTBOX_WEBHOOK_URL`, `OUTBOX_SIGNING_KEY_ID`, `OUTBOX_SIGNING_KEY` | Optional, worker only | Outbox receiver | `pnpm worker:outbox` delivers nothing |
+
+## Remaining units and blockers (as of 2026-11-15)
+
+| Unit(s) | Blocker |
+|---|---|
+| JFA-20 staff passkeys/MFA/step-up | Engineering only (add a maintained WebAuthn library such as `@simplewebauthn/server` and test with virtual authenticators). Unblocks privileged staff routes |
+| JFA-25 volunteer interest intake | None. Dependencies met (needs `volunteer_contact` consent) |
+| JFA-29 completion | Nonce-based CSP, anomaly reporting and alerts (overlaps JFA-43) |
+| JFA-31 identity federation | Requires a confirmed upstream identity contract |
+| JFA-32–40 upstream adapters | Verified live upstream APIs, base URLs and credentials for Secure Intake, Injustice Archive, FOIA Aggregator, Public Record, Civic Registry, Justice Teams, Compliance Engine and Liberty Nodes. Contracts and fakes can be built now on the JFA-30 SDK |
+| JFA-41 admin workspace | JFA-20 (step-up) first |
+| JFA-42 public measures | JFA-41. Must show "unverified", never zero |
+| JFA-43 telemetry and alerts | Alert destination (`SECURITY_ALERT_DESTINATION`) and a scheduler (Render cron is an owner cost decision) |
+| JFA-44 backups/restore | Neon project access to run and measure a restore drill |
+| JFA-45 staging, JFA-49 production | Owner-authorized Render/Neon provisioning and billing, domain and verified email sender |
+| JFA-46 performance/load | Deployed environment |
+| JFA-47 cross-browser/AT acceptance | Manual assistive-technology walkthroughs and a browser matrix (headless Chrome hangs in the agent sandbox) |
+| JFA-48 security review | External review is deferred per AGENTS.md. AI review and tests continue |
+| JFA-50 Engine Room closure | All of the above |
+
+## Process note
+PR #59 was merged while its `database` check had failed, because an agent CI-wait helper treated "completed" as "passed". The failure was a real audit-verification race, fixed in #60 (all green). The helper now requires every check to conclude `success`. Merge only on fully green required checks.
