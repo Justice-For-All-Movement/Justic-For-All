@@ -19,7 +19,7 @@ test("schema references resolve and no private mutation is advertised",()=>{
   }
  }
  assert.ok(!Object.keys(spec.paths).some(p=>p.includes("/me")||p.includes("content-reports")||p.includes("interest")));
- assert.equal(Object.keys(spec.paths).length,6);
+ assert.equal(Object.keys(spec.paths).length,7);
 });
 test("private data is never exposed through the public initiatives projection",()=>{
  const src=readFileSync(new URL("../apps/web/app/api/v1/initiatives/route.ts",import.meta.url),"utf8");

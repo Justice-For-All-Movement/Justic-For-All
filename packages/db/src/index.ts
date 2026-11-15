@@ -7,3 +7,5 @@ export type { PrivateMediaStore, MediaScanner } from "./editorial-media";
 export { submitEditorialReview, transitionEditorialReview, loadEditorialReviewPreview } from "./editorial-review";
 export { readPublishedEditorial, loadPublishedEditorial } from "./published-editorial";
 export type { PublicEditorial } from "./published-editorial";
+export { parseSearchQuery, searchPublicContent, loadPublicSearch, splitHighlight, SEARCH_TYPES, SEARCH_PAGE_SIZE, SEARCH_MAX_PAGE } from "./public-search";
+export type { SearchQuery, PublicSearchHit, PublicSearchResult, SnippetPart, SearchType } from "./public-search";
