@@ -31,3 +31,17 @@ Use a new dedicated Neon DB and Render service only once the owner has provided 
 - Exact contract paths: source verified; runtime responses, authorization and base URLs: **not verified**.
 - License review: **blocked** pending explicit licensing decisions or independent legal permission.
 - Next JFA-04 milestone will define stable OpenAPI contracts for core's own interfaces and adapter failure envelopes, not reproduce upstream API internals.
+
+## JFA-30 — Adapter SDK, signed events and outbox (implemented)
+
+**Inbound events** (`POST /api/internal/v1/events/{source}`):
+- Headers: `X-JFA-Source`, `X-JFA-Key-Id`, `X-JFA-Timestamp` (unix seconds), `X-JFA-Signature: v1=<hex HMAC-SHA256(secret, "v1:{source}:{keyId}:{timestamp}:{rawBody}")>`.
+- Rejects unknown source or key, header/path source mismatch, forged signatures, timestamps older than 300 s or more than 30 s ahead, bodies over 16 KiB, unknown fields, non-allowlisted event types (`public_projection.published.v1`, `public_projection.withdrawn.v1`, `module.status_changed.v1`), incompatible major schema versions, non-`PUBLIC_APPROVED` classification, and unsafe `public_url` values.
+- Accepted only from a `module_connections` row that is **enabled and verified**. Stored once per `event_id` in `inbox_events` (a replay returns `duplicate`). Audited.
+- With no `SERVICE_WEBHOOK_SIGNING_KEYS` the endpoint answers `503 ingestion_not_configured`. Keys are server-side only, several key IDs per source support rotation, and any malformed key ring disables ingestion.
+
+**Outbound outbox** (`outbox_events`): `claimOutboxBatch` uses `FOR UPDATE SKIP LOCKED` with 120 s leases (expired leases are reclaimed). Retryable failures back off exponentially (1 min → 6 h cap), and permanent failures or 8 attempts go to `dead_letter` (operator `requeueDeadLetter`). `pnpm worker:outbox` delivers signed POSTs to `OUTBOX_WEBHOOK_URL`. Without a configured receiver it delivers nothing and exits non-zero, so messages are never falsely marked delivered. Scheduling it (for example a Render cron job) is an operator decision with cost implications and is **not** in `render.yaml`.
+
+**Adapters** (`packages/adapters/src/sdk.ts`): the `ServiceAdapter.probe()` contract and `availabilityFrom()` give fail-closed availability. It requires a verified, fresh (≤15 min) probe exposing every required capability. `httpCapabilityAdapter` targets a **core-proposed** `GET /.well-known/jfa-capabilities` contract (`{contract_version, capabilities:[{name,methods}]}`). No upstream is known to implement it yet, so every module stays `unconfigured` until verified.
+
+Evidence: `tests/adapter-sdk.test.mjs` (envelope, signatures, rotation, key-ring parsing, capability-probe and deliverer contracts against local fake servers) and `packages/db/tests/integration-outbox.integration.mjs` (fail-closed sources, idempotency, retry/backoff/dead-letter/requeue, concurrent claims, lease reclaim). The route was also exercised end to end locally: accepted 202, duplicate 200, forged 401, stale 401, unknown source 401.

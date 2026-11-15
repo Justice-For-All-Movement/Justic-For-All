@@ -43,3 +43,6 @@ services:
         sync: false
       - key: EMAIL_FROM_ADDRESS
         sync: false
+      # Optional: signed module event ingestion (docs/INTEGRATIONS.md)
+      - key: SERVICE_WEBHOOK_SIGNING_KEYS
+        sync: false
