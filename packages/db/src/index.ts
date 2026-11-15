@@ -25,3 +25,5 @@ export { startSubscription, confirmSubscription, unsubscribeByToken, unsubscribe
 export type { SubscriptionState } from "./subscriptions.ts";
 export { submitReport, reportStatus, reportQueue, hideContent, dismissReport, appealAction, decideAppeal, REPORT_REASONS, MODERATION_POLICY } from "./moderation.ts";
 export type { ReportReason, QueueItem } from "./moderation.ts";
+export { openPrivacyRequest, listOwnRequests, exportOwnData, privacyQueue, setLegalHold, processErasure, closePrivacyRequest, SELF_SERVICE_TYPES } from "./privacy.ts";
+export type { SelfServiceType, OwnRequest, StaffQueueItem } from "./privacy.ts";
