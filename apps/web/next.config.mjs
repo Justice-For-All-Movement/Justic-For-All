@@ -26,7 +26,8 @@ const nextConfig = {
   { source: "/:path*", headers: securityHeaders },
   // Sign-in tokens appear in /auth/verify URLs: never leak them via Referer.
   { source: "/auth/:path*", headers: [{ key: "Referrer-Policy", value: "no-referrer" }, { key: "Cache-Control", value: "no-store" }] },
-  { source: "/account/:path*", headers: [{ key: "Cache-Control", value: "no-store" }] }
+  { source: "/account/:path*", headers: [{ key: "Cache-Control", value: "no-store" }] },
+  { source: "/subscriptions/:path*", headers: [{ key: "Referrer-Policy", value: "no-referrer" }, { key: "Cache-Control", value: "no-store" }] }
  ];}
 };
 export default nextConfig;

@@ -3,7 +3,7 @@
  * Messages carry no case details; templates are fixed server-side.
  */
 export type EmailCategory = "sign_in_link" | "subscription_confirmation" | "notification";
-export type EmailMessage = Readonly<{ to: string; subject: string; text: string; category: EmailCategory; idempotencyKey: string }>;
+export type EmailMessage = Readonly<{ to: string; subject: string; text: string; category: EmailCategory; idempotencyKey: string; headers?: Readonly<Record<string, string>> }>;
 export type SendResult = Readonly<{ status: "sent"; providerMessageId: string } | { status: "failed"; retryable: boolean; reason: string }>;
 export type EmailSender = Readonly<{
   id: "disabled" | "memory" | "log" | "resend";
@@ -53,7 +53,7 @@ export function createResendEmailSender(opts: { apiKey: string; from: string; ba
         const response = await doFetch(`${base}/emails`, {
           method: "POST",
           headers: { "Authorization": `Bearer ${opts.apiKey}`, "Content-Type": "application/json", "Idempotency-Key": message.idempotencyKey },
-          body: JSON.stringify({ from: opts.from, to: [message.to], subject: message.subject, text: message.text }),
+          body: JSON.stringify({ from: opts.from, to: [message.to], subject: message.subject, text: message.text, ...(message.headers ? { headers: message.headers } : {}) }),
           signal: AbortSignal.timeout(opts.timeoutMs ?? 10000)
         });
         if (response.status >= 200 && response.status < 300) {

@@ -21,3 +21,5 @@ export { setPublicName, getOwnProfile } from "./pseudonym.ts";
 export type { SetNameResult } from "./pseudonym.ts";
 export { ingestEvent, claimOutboxBatch, deliverOutbox, requeueDeadLetter, outboxBacklog, backoffSeconds, OUTBOX_MAX_ATTEMPTS } from "./integration.ts";
 export type { OutboxMessage, Deliverer } from "./integration.ts";
+export { startSubscription, confirmSubscription, unsubscribeByToken, unsubscribeIdentity, subscriptionStatus, suppressAddress, queueCampaign, deliverNotifications, unsubscribeToken } from "./subscriptions.ts";
+export type { SubscriptionState } from "./subscriptions.ts";

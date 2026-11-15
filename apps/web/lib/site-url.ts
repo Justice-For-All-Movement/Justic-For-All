@@ -12,4 +12,4 @@ export function getSiteUrl(env: NodeJS.ProcessEnv = process.env): URL | null {
 }
 
 /** Pages that are public but must not be indexed or listed in the sitemap. */
-export const NOINDEX_PATHS = ["/search", "/design-system", "/api/", "/health", "/ready", "/account", "/auth/"] as const;
+export const NOINDEX_PATHS = ["/search", "/design-system", "/api/", "/health", "/ready", "/account", "/auth/", "/subscriptions/"] as const;
