@@ -43,6 +43,14 @@
 
 Every optional provider integration runs behind an interface. When its variables are absent it uses a **disabled** adapter: the feature reports "not available" and never pretends to succeed. The full list lives in `RUNTIME_ENV` and in [HANDOFF.md](HANDOFF.md#deployment-configuration).
 
+| Name | Service | Enables |
+|---|---|---|
+| `IDENTITY_LOOKUP_KEY` | App secret (generate: `openssl rand -base64 32`) | Accounts (JFA-19). `sync: false` |
+| `CONTACT_ENCRYPTION_KEY` | App secret (different 32-byte key) | Accounts (JFA-19). `sync: false` |
+| `EMAIL_PROVIDER` | `resend` or `disabled` | Sign-in links and future notifications |
+| `EMAIL_PROVIDER_API_KEY` | Resend | Required when `EMAIL_PROVIDER=resend`. `sync: false` |
+| `EMAIL_FROM_ADDRESS` | Resend verified domain | Required when `EMAIL_PROVIDER=resend` |
+
 ## Operator steps
 
 1. In Neon (org `org-soft-bird-04166848`), create a dedicated project/database for this app and copy the pooled connection string (with `sslmode=require`).

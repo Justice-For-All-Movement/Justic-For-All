@@ -32,3 +32,14 @@ services:
       - key: APP_PUBLIC_URL
         # Public https origin, e.g. the onrender.com URL or custom domain.
         sync: false
+      # Optional (accounts stay closed until all are set): see docs/IDENTITY.md
+      - key: IDENTITY_LOOKUP_KEY
+        sync: false
+      - key: CONTACT_ENCRYPTION_KEY
+        sync: false
+      - key: EMAIL_PROVIDER
+        value: disabled
+      - key: EMAIL_PROVIDER_API_KEY
+        sync: false
+      - key: EMAIL_FROM_ADDRESS
+        sync: false

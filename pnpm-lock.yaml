@@ -18,6 +18,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@jfa/adapters':
+        specifier: workspace:*
+        version: link:../../packages/adapters
       '@jfa/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
@@ -27,6 +30,9 @@ importers:
       '@jfa/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@jfa/security':
+        specifier: workspace:*
+        version: link:../../packages/security
       '@jfa/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -71,6 +77,12 @@ importers:
 
   packages/db:
     dependencies:
+      '@jfa/adapters':
+        specifier: workspace:*
+        version: link:../adapters
+      '@jfa/security':
+        specifier: workspace:*
+        version: link:../security
       drizzle-orm:
         specifier: 0.45.4
         version: 0.45.4(@types/pg@8.23.1)(pg@8.23.1)

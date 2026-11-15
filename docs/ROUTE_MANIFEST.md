@@ -18,6 +18,12 @@ Route | Purpose | Sensitive input
 /accessibility | JFA-18 accessibility statement (no conformance claim) | None
 /sitemap.xml | JFA-18 indexable public pages and current published articles; empty without APP_PUBLIC_URL | None
 /robots.txt | JFA-18 crawler rules (disallows /api/, /search, /design-system, /health, /ready) | None
+/account/sign-in | JFA-19 email-link sign-in; shows "not open yet" unless fully configured (noindex) | Email address (sealed, HMAC lookup)
+/auth/sign-in (POST) | JFA-19 request link; same response for existing/new/disabled/throttled | Email address
+/auth/verify | JFA-19 confirm page; POST-only consumption, no-referrer | Single-use token
+/auth/verify/confirm (POST) | JFA-19 consume link, set `__Host-` session cookie | Single-use token
+/auth/sign-out (POST) | JFA-19 revoke session | Session cookie
+/account | JFA-19 sessions, sign-out everywhere, deactivate, delete request (noindex, no-store) | Session cookie, typed confirmation
 /contact | JFA-16 contact center (public issue tracker, security policy; no form) | None
 /privacy | Interim privacy disclosure | None
 /terms | Interim information/terms boundary | None
