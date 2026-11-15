@@ -29,5 +29,6 @@ export function PublishedEditorialArticle({record}:{record:PublicEditorial}){
     {"source_url" in media?<span> Source reference: {media.source_url}</span>:<span> Private scanned asset reference.</span>}
    </li>)}</ul>
   </section>:null}
+  <p><a href={`/report?slug=${record.slug}`}>Report a problem with this article</a></p>
  </article>;
 }
