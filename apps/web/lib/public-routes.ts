@@ -7,6 +7,9 @@ export const publicRoutes = [
   { href: "/principles", label: "Principles" },
   { href: "/initiatives", label: "Initiatives" },
   { href: "/get-involved", label: "Get involved" },
+  { href: "/resources", label: "Resources" },
+  { href: "/safety", label: "Safety guidance" },
+  { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" }
 ] as const;
