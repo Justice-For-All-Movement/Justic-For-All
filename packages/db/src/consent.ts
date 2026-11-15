@@ -31,6 +31,11 @@ export async function recordConsent(client: PoolClient, actorId: string, subject
       "SELECT id FROM core_current_consent WHERE subject_ref=$1 AND purpose=$2", [ref(subjectId), purpose.id]);
     await client.query(`INSERT INTO consent_records(subject_ref,purpose,scope,policy_version,decision,supersedes_id,channel)
       VALUES($1,$2,$3,$4,$5,$6,$7)`, [ref(subjectId), purpose.id, `core.${purpose.id}`, purpose.version, decision, prev.rows[0]?.id ?? null, channel]);
+    // Withdrawing news consent stops future email immediately (JFA-24).
+    if (decision === "withdraw" && purpose.id === "news_email") {
+      await client.query(`UPDATE subscriptions s SET confirmation_state='unsubscribed',unsubscribed_at=now()
+        FROM contact_points c WHERE c.id=s.contact_point_id AND c.identity_id=$1 AND s.confirmation_state IN ('pending_verification','active')`, [subjectId]);
+    }
     // Withdrawing display consent hides the public name immediately (JFA-22).
     if (decision === "withdraw" && purpose.id === "public_display_name") {
       await client.query("UPDATE profiles SET visibility='private',row_version=row_version+1 WHERE identity_id=$1 AND visibility='public'", [subjectId]);

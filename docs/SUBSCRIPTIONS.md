@@ -1,0 +1,9 @@
+# JFA-24 — Subscription and email notification lifecycle
+
+- **Double opt-in:** a signed-in account (email already verified by the sign-in link) must (1) turn on `news_email` consent, (2) request a subscription, and (3) click a single-use confirmation link (24 h, digest stored, POST-only confirm page). Nothing is queued for unconfirmed addresses.
+- **Unsubscribe:** every email carries a one-click link and RFC 8058 `List-Unsubscribe` / `List-Unsubscribe-Post` headers. The token is an HMAC of the subscription ID (digest stored), so no login is needed. Unsubscribing adds the address HMAC to `email_suppressions`. Withdrawing `news_email` consent or using "Stop news emails" in the account unsubscribes immediately. Only a fresh double opt-in lifts an *unsubscribe* suppression. Bounce, complaint and manual suppressions (support/admin, `privacy.process`) are never lifted automatically.
+- **Sending:** editors/admins (`cms.publish`) queue plain-text campaigns. Subjects are 5–120 chars with no `<>` or CR/LF, and bodies 20–5000 chars with no `<>`, enforced by DB CHECKs. Recipients are snapshotted from eligible subscribers (active subscription, active account, current-version consent, not suppressed). **Every gate is re-checked at send time**, so a later withdrawal skips the message. Delivery uses SKIP LOCKED leases, idempotency key `delivery-<id>`, a unique (campaign, subscription) pair, exponential backoff, and dead-lettering after 6 attempts or a permanent failure.
+- **Content safety:** campaigns are editorial text only. No case details, personal data or tracking pixels are used, and the email body is plain text.
+- **Not done:** there is no provider bounce webhook yet (use `suppressAddress`), no scheduled delivery worker (call `deliverNotifications`, for example from a cron job; scheduling is an operator and cost decision), and live delivery through Resend is untested.
+
+Evidence: `packages/db/tests/subscriptions.integration.mjs`.
