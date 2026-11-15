@@ -10,6 +10,9 @@ DO $$ BEGIN
    CHECK(purpose ~ '^[a-z][a-z0-9_]{2,60}$' AND policy_version ~ '^\d{4}-\d{2}-\d{2}$' AND scope ~ '^[a-z][a-z0-9_:.-]{1,80}$') NOT VALID;
  END IF;
 END $$;
+-- Total order for "latest decision": timestamps can tie inside one transaction.
+ALTER TABLE consent_records ADD COLUMN IF NOT EXISTS seq bigint GENERATED ALWAYS AS IDENTITY;
+ALTER TABLE consent_records ALTER COLUMN recorded_at SET DEFAULT clock_timestamp();
 ALTER TABLE consent_records ADD COLUMN IF NOT EXISTS channel text NOT NULL DEFAULT 'account_settings'
  CHECK(channel IN ('account_settings','signup_flow'));
 -- TRUNCATE bypasses row triggers; forbid it explicitly for the ledgers.
@@ -19,6 +22,6 @@ DROP TRIGGER IF EXISTS consent_records_no_truncate ON consent_records;
 CREATE TRIGGER consent_records_no_truncate BEFORE TRUNCATE ON consent_records FOR EACH STATEMENT EXECUTE FUNCTION jfa_forbid_truncate();
 CREATE OR REPLACE VIEW core_current_consent AS
  SELECT DISTINCT ON (subject_ref,purpose) subject_ref,purpose,scope,policy_version,decision,recorded_at,id
- FROM consent_records ORDER BY subject_ref,purpose,recorded_at DESC,id DESC;
+ FROM consent_records ORDER BY subject_ref,purpose,seq DESC;
 INSERT INTO jfa_schema_migrations(version) VALUES ('0007_consent_ledger') ON CONFLICT(version) DO NOTHING;
 COMMIT;

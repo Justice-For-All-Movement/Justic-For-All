@@ -46,3 +46,10 @@ test("consent routes are self-service, same-origin and keep the session",()=>{
  assert.match(exp,/exportConsent\(client, session\.identityId, session\.identityId\)/);
  assert.match(exp,/"Cache-Control": "no-store"/);
 });
+
+test("equal timestamps resolve to the later ledger entry",()=>{
+ const t=at(15);
+ const events=[{purpose:purpose.id,policyVersion:purpose.version,decision:"grant",recordedAt:t},{purpose:purpose.id,policyVersion:purpose.version,decision:"withdraw",recordedAt:t}];
+ assert.equal(hasConsent(events,purpose.id),false);
+ assert.equal(hasConsent([...events].reverse(),purpose.id),true);
+});

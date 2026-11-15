@@ -32,7 +32,9 @@ export type ConsentState = Readonly<{ purpose: string; status: "granted" | "with
 /** Latest event per purpose wins; grants for outdated policy versions require re-consent. */
 export function summarizeConsent(events: readonly ConsentEvent[]): ConsentState[] {
   return CONSENT_PURPOSES.map(purpose => {
-    const latest = events.filter(e => e.purpose === purpose.id).sort((a, b) => b.recordedAt.getTime() - a.recordedAt.getTime())[0];
+    // Input is in ledger order; on equal timestamps the later entry wins.
+    let latest: ConsentEvent | undefined;
+    for (const e of events) if (e.purpose === purpose.id && (!latest || e.recordedAt.getTime() >= latest.recordedAt.getTime())) latest = e;
     if (!latest) return { purpose: purpose.id, status: "never", policyVersion: null, recordedAt: null };
     if (latest.decision === "withdraw") return { purpose: purpose.id, status: "withdrawn", policyVersion: latest.policyVersion, recordedAt: latest.recordedAt };
     const current = latest.policyVersion >= purpose.reconsentFrom;

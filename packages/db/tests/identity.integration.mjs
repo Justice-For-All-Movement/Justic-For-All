@@ -31,8 +31,8 @@ test("email link signs up, signs in, and is single-use; sessions validate and re
 
  // Stored data never contains the clear email or bearer tokens.
  const leak=await withClient(c=>c.query(`SELECT
-  (SELECT count(*) FROM contact_points WHERE convert_from(address_ciphertext,'LATIN1') ILIKE '%example.org%')+
-  (SELECT count(*) FROM auth_sign_in_tokens WHERE convert_from(email_sealed,'LATIN1') ILIKE '%example.org%') AS n`));
+  (SELECT count(*) FROM contact_points WHERE position(convert_to('example.org','UTF8') IN address_ciphertext)>0)+
+  (SELECT count(*) FROM auth_sign_in_tokens WHERE position(convert_to('example.org','UTF8') IN email_sealed)>0) AS n`));
  assert.equal(Number(leak.rows[0].n),0);
 
  const session=await withClient(c=>getSession(c,first.sessionToken));

@@ -11,7 +11,7 @@ const ref = (identityId: string) => `identity:${identityId}`;
 
 export async function listConsentEvents(client: PoolClient, subjectId: string): Promise<ConsentEvent[]> {
   const r = await client.query<{ purpose: string; policy_version: string; decision: "grant" | "withdraw"; recorded_at: Date }>(
-    "SELECT purpose,policy_version,decision,recorded_at FROM consent_records WHERE subject_ref=$1 ORDER BY recorded_at,id", [ref(subjectId)]);
+    "SELECT purpose,policy_version,decision,recorded_at FROM consent_records WHERE subject_ref=$1 ORDER BY seq", [ref(subjectId)]);
   return r.rows.map(row => ({ purpose: row.purpose, policyVersion: row.policy_version, decision: row.decision, recordedAt: row.recorded_at }));
 }
 
