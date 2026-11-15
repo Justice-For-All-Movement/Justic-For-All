@@ -40,7 +40,7 @@ export async function assertAuthorized(client: PoolClient, actorId: string, acti
 /** Records a denial outside any business transaction so it survives rollback. */
 export async function recordDenial(client: PoolClient, actorId: string, action: Action, resourceRef: string): Promise<void> {
   await client.query("INSERT INTO audit_events(actor_ref,action,resource_ref,policy_result) VALUES($1,$2,$3,'deny')",
-    [UUID.test(actorId) ? actorId : "invalid", `authz:${action}`, resourceRef.slice(0, 200)]);
+    [UUID.test(actorId) ? actorId : "invalid", `authz:${action}`, resourceRef.replace(/[@\s]/g, "_").slice(0, 200)]);
 }
 
 export async function grantRole(client: PoolClient, actorId: string,
@@ -57,7 +57,7 @@ export async function grantRole(client: PoolClient, actorId: string,
     const row = await client.query<{ id: string }>(`INSERT INTO role_grants(subject_id,role,resource_scope,approved_by,expires_at)
       VALUES($1,$2,$3,$4,$5) RETURNING id`, [input.subjectId, input.role, input.scope, actorId, input.expiresAt ?? null]);
     await client.query("INSERT INTO audit_events(actor_ref,action,resource_ref,policy_result) VALUES($1,'role_granted',$2,'allow')",
-      [actorId, `role-grant:${row.rows[0].id}:${input.role}@${input.scope}`]);
+      [actorId, `role-grant:${row.rows[0].id}:${input.role}/${input.scope}`]);
     await client.query("COMMIT");
     return { grantId: row.rows[0].id };
   } catch (e) { await client.query("ROLLBACK").catch(() => undefined); throw e; }
