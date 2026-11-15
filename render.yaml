@@ -1,0 +1,34 @@
+# Render Blueprint for the Justice For All core web service.
+# Creates nothing by itself: an authorized operator must apply it in the
+# Render dashboard (New > Blueprint) and enter the `sync: false` secrets.
+# See docs/DEPLOYMENT_RENDER.md for the full runbook and env var reference.
+services:
+  - type: web
+    name: justice-for-all-web
+    runtime: node
+    # `free` avoids unapproved cost. A paid plan (owner approval required)
+    # also enables `preDeployCommand: pnpm db:migrate`; see the runbook.
+    plan: free
+    branch: main
+    autoDeploy: true
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    # Migrations run before the server binds. The runner holds a PostgreSQL
+    # advisory lock and skips applied versions, so restarts and parallel
+    # instances are safe. A failed migration fails the deploy, so Render
+    # keeps the previous release serving.
+    startCommand: pnpm start:render
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      # Render injects PORT (default 10000); the start script binds to it.
+      - key: DATABASE_URL
+        # Neon pooled or direct connection string with sslmode=require.
+        sync: false
+      - key: APP_PUBLIC_URL
+        # Public https origin, e.g. the onrender.com URL or custom domain.
+        sync: false

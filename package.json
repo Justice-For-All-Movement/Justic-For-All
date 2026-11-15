@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "pnpm --filter @jfa/web dev",
     "build": "pnpm --filter @jfa/web build",
+    "start": "pnpm --filter @jfa/web start",
+    "start:render": "node scripts/check-runtime-env.mjs && pnpm db:migrate && pnpm start",
     "typecheck": "pnpm --filter @jfa/web typecheck && pnpm --filter @jfa/worker typecheck && pnpm --filter @jfa/db typecheck",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "check": "pnpm test && pnpm lint && pnpm scan:secrets && pnpm typecheck && pnpm build",
