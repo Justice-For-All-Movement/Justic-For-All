@@ -43,7 +43,7 @@ export async function readPublishedEditorial(client:PoolClient,slug:string,local
  ) active
  LEFT JOIN profiles p_author ON p_author.identity_id=r.author_id AND p_author.visibility='public'
  LEFT JOIN profiles p_reviewer ON p_reviewer.identity_id=active.approvers[1] AND p_reviewer.visibility='public'
- WHERE e.slug=$1 AND e.locale=$2 AND e.visibility='public'
+ WHERE e.slug=$1 AND e.locale=$2 AND e.visibility='public' AND NOT e.moderation_hold
   AND r.editorial_state='published' AND w.state='published'
   AND source.editorial_state='draft' AND source.version=r.version-1
   AND source.author_id=r.author_id AND source.content_hash=r.content_hash

@@ -28,6 +28,9 @@ Route | Purpose | Sensitive input
 /account/public-name (POST) | JFA-22 set or hide a validated pseudonym (requires display consent) | Pseudonym
 /account/privacy | JFA-23 consent toggles | Session
 /account/consent/export | JFA-23 own consent history JSON (no-store) | Session
+/report | JFA-26 report published content (same-origin POST, rate-limited, private receipt; noindex) | Reason, optional details (≤1000 chars)
+/subscriptions/confirm, /subscriptions/unsubscribe | JFA-24 double opt-in confirm and one-click unsubscribe (noindex, no-referrer) | Single-use / unsubscribe token
+/api/internal/v1/events/{source} (POST) | JFA-30 signed m2m event ingestion | Signed public projection events only
 /contact | JFA-16 contact center (public issue tracker, security policy; no form) | None
 /privacy | Interim privacy disclosure | None
 /terms | Interim information/terms boundary | None

@@ -23,3 +23,5 @@ export { ingestEvent, claimOutboxBatch, deliverOutbox, requeueDeadLetter, outbox
 export type { OutboxMessage, Deliverer } from "./integration.ts";
 export { startSubscription, confirmSubscription, unsubscribeByToken, unsubscribeIdentity, subscriptionStatus, suppressAddress, queueCampaign, deliverNotifications, unsubscribeToken } from "./subscriptions.ts";
 export type { SubscriptionState } from "./subscriptions.ts";
+export { submitReport, reportStatus, reportQueue, hideContent, dismissReport, appealAction, decideAppeal, REPORT_REASONS, MODERATION_POLICY } from "./moderation.ts";
+export type { ReportReason, QueueItem } from "./moderation.ts";
