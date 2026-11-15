@@ -9,15 +9,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@jfa/core": "workspace:*",
+    "@jfa/adapters": "workspace:*",
     "@jfa/contracts": "workspace:*",
+    "@jfa/core": "workspace:*",
+    "@jfa/db": "workspace:*",
+    "@jfa/security": "workspace:*",
     "@jfa/ui": "workspace:*",
+    "@simplewebauthn/browser": "14.0.0",
     "next": "16.4.5",
     "react": "19.3.1",
-    "react-dom": "19.3.1",
-    "@jfa/db": "workspace:*",
-    "@jfa/adapters": "workspace:*",
-    "@jfa/security": "workspace:*"
+    "react-dom": "19.3.1"
   },
   "devDependencies": {
     "@types/node": "22.20.5",

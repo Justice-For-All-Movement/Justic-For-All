@@ -71,7 +71,7 @@ export default async function Account({ searchParams }: Context) {
           : <button className="ui-button" type="submit" name="action" value="start">Subscribe to news</button>}
       </form>
     </section>
-    <p><Link href="/account/privacy">Privacy choices and consent history</Link> · <Link href="/account/privacy-requests">Your data and privacy requests</Link></p>
+    <p><Link href="/account/privacy">Privacy choices and consent history</Link> · <Link href="/account/privacy-requests">Your data and privacy requests</Link> · <Link href="/account/security">Sign-in security</Link></p>
     <section aria-labelledby="deactivate-h"><h2 id="deactivate-h">Deactivate account</h2>
       <p>Ends every session and stops sign-in. Your data is kept until you ask us to delete it.</p>
       <form method="post" action="/account/deactivate">

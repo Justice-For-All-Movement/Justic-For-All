@@ -24,7 +24,7 @@ Two-person rules sit on top of this matrix: an author can never approve or publi
 - **Scopes** are `core`, `org:<slug>` or `source:<slug>`, enforced by a DB CHECK. A grant applies only to its own scope, except that a `core` admin covers every scope.
 - **ABAC self-service:** `self.*` actions need `resource.ownerId === subject.id`. Even admins cannot read another person's self-service data through these actions. Guessed IDs are denied.
 - **Grant administration:** admins only, never to themselves, only to active identities. Grants are immutable except for revocation (DB trigger), never deleted, and revocation is final. A subject cannot revoke its own grant, and the last active core admin cannot be revoked. Changes are serialized with an advisory lock and audited.
-- **Step-up:** privileged actions carry `privileged: true`. HTTP routes for them must pass `enforceStepUp: true` with the time of a phishing-resistant re-authentication (JFA-20). Until JFA-20 lands, **no privileged staff HTTP route exists**: these operations are reachable only through internal services.
+- **Step-up:** privileged actions carry `privileged: true`. Staff HTTP routes must call `authorizeStaffRequest` (JFA-20, [MFA.md](MFA.md)), which requires an enrolled factor and a step-up on the current session within 10 minutes.
 - **Denials** can be audited with `recordDenial`, outside the business transaction so the record survives rollback.
 - `core_active_grants` is the single SQL definition of "usable now" (active identity, unrevoked, unexpired).
 

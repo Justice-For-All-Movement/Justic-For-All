@@ -9,3 +9,4 @@ export function mayPublish(classification: DataClassification, editorialApproval
 
 export { newBearerToken, tokenDigest, isWellFormedToken, parseKey, lookupHmac, sealText, openText, safeEqual, normalizeEmail } from "./crypto.ts";
 export type { KeyMaterial } from "./crypto.ts";
+export { base32Encode, base32Decode, newTotpSecret, totpAt, matchTotp, currentStep, otpauthUri, TOTP_PERIOD } from "./totp.ts";
