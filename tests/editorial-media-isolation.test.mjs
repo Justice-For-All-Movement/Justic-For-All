@@ -12,6 +12,10 @@ function dependencies({allowed=true,failQuery,putError}={}){
  const queries=[],puts=[],deletes=[];
  return {queries,puts,deletes,client:{query:async(sql,values)=>{
   queries.push({sql,values});if(failQuery&&sql.includes(failQuery))throw new Error('synthetic query failure');
+  // Authorization now loads the subject and grants (JFA-21 policy).
+  if(/FROM identities WHERE id/.test(sql))return {rows:[{account_state:allowed?'active':'disabled'}]};
+  if(/FROM role_grants WHERE subject_id/.test(sql))return {rows:[{role:'editor',resource_scope:'core',expires_at:null,revoked_at:null}]};
+  if(/SELECT now\(\) AS now/.test(sql))return {rows:[{now:new Date()}]};
   return {rows:[{allowed}]};
  }},store:{putPrivate:async(key,bytes,mime)=>{if(putError)throw new Error('synthetic storage failure');puts.push({key,bytes:Buffer.from(bytes),mime});},deletePrivate:async key=>{deletes.push(key);}}};
 }

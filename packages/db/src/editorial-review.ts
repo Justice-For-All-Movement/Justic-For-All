@@ -1,4 +1,5 @@
 import type {PoolClient} from "pg";
+import {assertAuthorized} from "./authorization.ts";
 import {editorialTransition} from "../../../scripts/lib/editorial-review.mjs";
 import {validateEditorialDocument} from "../../../scripts/lib/editorial-doc.mjs";
 
@@ -6,21 +7,13 @@ const ID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{1
 type Action="approve"|"revoke"|"reject"|"publish"|"withdraw";
 type Workflow={id:string;entry_id:string;source_revision_id:string;state:"in_review"|"approved"|"rejected"|"published"|"withdrawn";row_version:number;published_revision_id:string|null};
 type Source={id:string;version:number;content:unknown;content_hash:string|null;author_id:string;editorial_state:string};
-async function requireRole(client:PoolClient,actorId:string,roles:readonly string[]) {
- const result=await client.query<{allowed:boolean}>(`SELECT EXISTS (
-  SELECT 1 FROM identities i JOIN role_grants r ON r.subject_id=i.id
-  WHERE i.id=$1 AND i.account_state='active' AND r.role=ANY($2::text[])
-   AND r.resource_scope='core' AND (r.expires_at IS NULL OR r.expires_at>now())
- ) AS allowed`,[actorId,roles]);
- if(!result.rows[0]?.allowed)throw new Error("Editorial role required");
-}
 
 /** Internal-only: the caller must authenticate actorId from a trusted session. */
 export async function submitEditorialReview(client:PoolClient,actorId:string,entryId:string,sourceVersion:number) {
  if(!ID.test(actorId)||!ID.test(entryId)||!Number.isSafeInteger(sourceVersion)||sourceVersion<1)throw new Error("Invalid review input");
  await client.query("BEGIN");
  try {
-  await requireRole(client,actorId,["editor","admin"]);
+  await assertAuthorized(client,actorId,"cms.create_draft");
   const entry=await client.query<{id:string}>(`SELECT id FROM cms_entries WHERE id=$1 FOR UPDATE`,[entryId]);
   if(!entry.rows[0])throw new Error("Editorial entry not found");
   const source=await client.query<Source>(`SELECT id,version,content,content_hash,author_id,editorial_state
@@ -50,9 +43,7 @@ export async function transitionEditorialReview(
   !["approve","revoke","reject","publish","withdraw"].includes(action))throw new Error("Invalid review transition input");
  await client.query("BEGIN");
  try {
-  const roles=action==="approve"||action==="revoke"||action==="reject"?["reviewer","admin"]:
-   action==="publish"?["editor","admin"]:["admin"];
-  await requireRole(client,actorId,roles);
+  await assertAuthorized(client,actorId,action==="publish"?"cms.publish":action==="withdraw"?"cms.withdraw":"cms.review");
   const route=await client.query<{entry_id:string}>(`SELECT entry_id FROM cms_review_workflows WHERE id=$1`,[workflowId]);
   if(!route.rows[0])throw new Error("Review workflow not found");
   // Match draft-submission lock order: entry first, then workflow.
@@ -140,7 +131,7 @@ export async function loadEditorialReviewPreview(client:PoolClient,actorId:strin
  if(!ID.test(actorId)||!ID.test(workflowId))throw new Error("Invalid preview input");
  await client.query("BEGIN READ ONLY");
  try {
-  await requireRole(client,actorId,["editor","reviewer","admin"]);
+  await assertAuthorized(client,actorId,"cms.read_draft");
   const result=await client.query<{
    state:string;row_version:number;entry_id:string;source_revision_id:string;
    version:number;content:unknown;content_hash:string|null
