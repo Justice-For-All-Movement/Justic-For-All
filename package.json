@@ -13,9 +13,10 @@
     "start:render": "node scripts/check-runtime-env.mjs && pnpm db:migrate && pnpm start",
     "typecheck": "pnpm --filter @jfa/web typecheck && pnpm --filter @jfa/worker typecheck && pnpm --filter @jfa/db typecheck",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
-    "check": "pnpm test && pnpm lint && pnpm scan:secrets && pnpm typecheck && pnpm build",
+    "check": "pnpm test && pnpm lint && pnpm scan:secrets && pnpm typecheck && pnpm build && pnpm check:a11y",
     "db:migrate": "pnpm --filter @jfa/db migrate",
     "lint": "eslint . --max-warnings=0",
+    "check:a11y": "node scripts/check-a11y.mjs",
     "scan:secrets": "node scripts/scan-secrets.mjs"
   },
   "devDependencies": {

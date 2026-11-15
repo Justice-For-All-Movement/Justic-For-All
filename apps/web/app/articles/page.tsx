@@ -12,7 +12,9 @@ export async function generateMetadata({searchParams}:Context):Promise<Metadata>
  const result=await loadPublishedEditorial(slug);
  if(result.status!=="published")return {title:"Article unavailable",robots:{index:false,follow:false}};
  return {title:`${result.record.title} — Justice For All`,description:result.record.summary,
-  alternates:{canonical:`/articles/${result.record.slug}`}};
+  alternates:{canonical:`/articles/${result.record.slug}`},
+  openGraph:{type:"article",title:result.record.title,description:result.record.summary,
+   url:`/articles/${result.record.slug}`,publishedTime:result.record.publishedAt}};
 }
 export default async function ArticlePage({searchParams}:Context){
  const query=await searchParams;

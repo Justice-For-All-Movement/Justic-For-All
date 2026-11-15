@@ -11,6 +11,7 @@ export const publicRoutes = [
   { href: "/safety", label: "Safety guidance" },
   { href: "/contact", label: "Contact" },
   { href: "/search", label: "Search" },
+  { href: "/accessibility", label: "Accessibility" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" }
 ] as const;

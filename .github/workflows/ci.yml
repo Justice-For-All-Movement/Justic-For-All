@@ -33,6 +33,8 @@ jobs:
         run: pnpm typecheck
       - name: Build public web
         run: pnpm build
+      - name: Static accessibility check of prerendered pages
+        run: pnpm check:a11y
   database:
     runs-on: ubuntu-latest
     timeout-minutes: 15

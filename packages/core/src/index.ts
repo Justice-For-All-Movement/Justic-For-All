@@ -37,3 +37,5 @@ export { participationPaths, participationAvailability, publicResources } from "
 export type { ParticipationPath, PathAvailability, PublicResource } from "./participation";
 export { buildSiteIndex, searchSitePages, corePages } from "./site-search";
 export type { SitePage, SiteHit } from "./site-search";
+export { SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_META, MESSAGES, resolveLocale, t } from "./i18n";
+export type { Locale, MessageKey } from "./i18n";

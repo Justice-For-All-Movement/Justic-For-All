@@ -1,36 +1,45 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { DEFAULT_LOCALE, LOCALE_META, t } from "@jfa/core";
 import { publicRoutes } from "../lib/public-routes";
+import { getSiteUrl } from "../lib/site-url";
 import "./styles.css";
 
+const locale = DEFAULT_LOCALE;
+const site = getSiteUrl();
+
 export const metadata: Metadata = {
-  title: "Justice For All",
-  description: "Public information and peaceful civic participation."
+  title: t(locale, "site.name"),
+  description: t(locale, "site.description"),
+  ...(site ? { metadataBase: site } : {}),
+  // Open Graph carries only public page metadata; no images of people.
+  openGraph: { siteName: t(locale, "site.name"), type: "website", locale: LOCALE_META[locale].ogLocale }
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang={LOCALE_META[locale].htmlLang} dir={LOCALE_META[locale].dir}>
       <body>
-        <a className="skip-link" href="#main">Skip to content</a>
+        <a className="skip-link" href="#main">{t(locale, "a11y.skipToContent")}</a>
         <header className="site-header">
-          <Link href="/" className="brand">Justice For All</Link>
-          <nav aria-label="Main navigation">
+          <Link href="/" className="brand">{t(locale, "site.name")}</Link>
+          <nav aria-label={t(locale, "nav.main")}>
             {publicRoutes.filter((route) => ["/about","/stories","/records","/initiatives","/get-involved","/search"].includes(route.href)).map((route) => <Link key={route.href} href={route.href}>{route.label}</Link>)}
           </nav>
         </header>
         <main id="main">{children}</main>
         <footer>
-          <span>Justice For All</span>
-          <nav aria-label="Legal information">
-            <Link href="/privacy">Privacy</Link>{" · "}
-            <Link href="/terms">Site information</Link>{" · "}
-            <Link href="/safety">Safety</Link>{" · "}
-            <Link href="/resources">Resources</Link>{" · "}
-            <Link href="/contact">Contact</Link>
+          <span>{t(locale, "site.name")}</span>
+          <nav aria-label={t(locale, "nav.legal")}>
+            <Link href="/privacy">{t(locale, "nav.privacy")}</Link>{" · "}
+            <Link href="/terms">{t(locale, "nav.terms")}</Link>{" · "}
+            <Link href="/accessibility">{t(locale, "nav.accessibility")}</Link>{" · "}
+            <Link href="/safety">{t(locale, "nav.safety")}</Link>{" · "}
+            <Link href="/resources">{t(locale, "nav.resources")}</Link>{" · "}
+            <Link href="/contact">{t(locale, "nav.contact")}</Link>
           </nav>
-          <span>Information only. Sensitive submissions are not accepted on this site.</span>
+          <span>{t(locale, "footer.notice")}</span>
         </footer>
       </body>
     </html>
