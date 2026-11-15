@@ -4,8 +4,8 @@ This maps implemented controls to ASVS chapters as engineering evidence. It is *
 
 | Chapter | Implemented control | Evidence | Gap / follow-up |
 |---|---|---|---|
-| V2 Authentication | Passwordless single-use email links (256-bit, 15 min, digest-only), anti-enumeration, per-address/per-client DB throttles plus a per-instance limiter | `identity.integration.mjs`, `identity-boundary.test.mjs` | Phishing-resistant MFA/passkeys for staff (JFA-20) |
-| V3 Session management | Opaque server-side sessions, `__Host-` HttpOnly/Secure/SameSite=Lax cookie, idle and absolute expiry, sign-out everywhere, revocation on deactivate/delete | identity tests | Step-up re-authentication (JFA-20) |
+| V2 Authentication | Passwordless single-use email links (256-bit, 15 min, digest-only), anti-enumeration, per-address/per-client DB throttles plus a per-instance limiter | `identity.integration.mjs`, `identity-boundary.test.mjs` | Done in JFA-20: passkeys, TOTP and recovery codes. Making MFA mandatory for every staff login (not only staff routes) is a policy choice |
+| V3 Session management | Opaque server-side sessions, `__Host-` HttpOnly/Secure/SameSite=Lax cookie, idle and absolute expiry, sign-out everywhere, revocation on deactivate/delete | identity tests | Done in JFA-20: per-session 10-minute step-up |
 | V4 Access control | Central deny-by-default RBAC/ABAC, scope isolation, owner-only self-service, immutable revocable grants, two-person publication | `authorization-policy.test.mjs`, `006_authorization.sql`, review tests | Admin UI routes must pass `enforceStepUp` (JFA-41) |
 | V5 Validation, sanitization, encoding | Strict structured editorial schema (no HTML), bounded search input with `websearch_to_tsquery`, envelope validation, pseudonym rules, React escaping, no `dangerouslySetInnerHTML` | validator, search and adapter tests | — |
 | V7 Error handling & logging | Coarse public errors (no DB strings), SQLSTATE-only migration logs, hash-chained privacy-safe audit log | `audit-chain.integration.mjs` | Central log shipping and alerting (JFA-43) |

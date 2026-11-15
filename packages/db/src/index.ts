@@ -27,3 +27,6 @@ export { submitReport, reportStatus, reportQueue, hideContent, dismissReport, ap
 export type { ReportReason, QueueItem } from "./moderation.ts";
 export { openPrivacyRequest, listOwnRequests, exportOwnData, privacyQueue, setLegalHold, processErasure, closePrivacyRequest, SELF_SERVICE_TYPES } from "./privacy.ts";
 export type { SelfServiceType, OwnRequest, StaffQueueItem } from "./privacy.ts";
+export { relyingPartyFrom, hasMfa, getStepUp, mayEnroll, passkeyRegistrationOptions, verifyPasskeyRegistration, passkeyStepUpOptions, verifyPasskeyStepUp,
+  beginTotpEnrollment, confirmTotpEnrollment, stepUpWithTotp, stepUpWithRecoveryCode, revokeFactor, factorSummary, authorizeStaffRequest } from "./mfa.ts";
+export type { MfaDeps } from "./mfa.ts";
