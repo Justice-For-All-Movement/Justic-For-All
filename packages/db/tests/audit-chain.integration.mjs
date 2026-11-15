@@ -65,3 +65,11 @@ test("audit reading requires audit.read and is itself audited",async()=>{
  const read=await run(c=>c.query("SELECT count(*)::int AS n FROM audit_events WHERE actor_ref=$1 AND action='audit_read'",[admin]));
  assert.equal(read.rows[0].n,1);
 });
+
+test("verification stays correct while other sessions keep appending",async()=>{
+ let stop=false;
+ const writer=(async()=>{while(!stop)await run(c=>c.query("INSERT INTO audit_events(actor_ref,action,resource_ref,policy_result) VALUES('w','concurrent_writer','r','allow')"));})();
+ try{
+  for(let i=0;i<15;i++){const v=await run(c=>verifyAuditChain(c));assert.equal(v.ok,true,`verification ${i} under load`);}
+ }finally{stop=true;await writer;}
+});
