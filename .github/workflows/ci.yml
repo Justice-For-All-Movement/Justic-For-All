@@ -25,6 +25,8 @@ jobs:
         run: pnpm licenses list --json > /tmp/jfa-license-inventory.json
       - name: Secret scanner
         run: pnpm scan:secrets
+      - name: Validate PR registry
+        run: node scripts/validate-pr-registry.mjs && node --test registry/pr-contract.test.mjs
       - name: Lint
         run: pnpm lint
       - name: Test
